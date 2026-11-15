@@ -2,7 +2,7 @@
 
 Stand: 2026-11-15 | Prinzip: **erst lauffähige CSV-Baseline, dann UX/Integrationen**
 
-Diese Roadmap ist eine Planung, keine Behauptung abgeschlossener Implementierung. Abgeschlossen sind die GitHub-Upstream-Synchronisierung, die initiale Projektdokumentation und **P0-01 (lokaler Start und CSV-Upload bis zur API-Key-Abfrage, vom Nutzer am 15.11.2026 bestätigt)**. Externe API-Tests und eine tatsächliche Datenanreicherung sind noch offen.
+Diese Roadmap ist eine Planung, keine Behauptung abgeschlossener Implementierung. Abgeschlossen sind die GitHub-Upstream-Synchronisierung, die initiale Projektdokumentation und **P0-01 (lokaler Start und CSV-Upload bis zur API-Key-Abfrage, vom Nutzer am 15.11.2026 bestätigt)**. Am 15.11.2026 bestätigte der Nutzer zusätzlich einen nach Behebung eines Shell-Key-Konflikts erfolgreich durchgelaufenen Firecrawl-/OpenRouter-Enrichment-Lauf mit gefundenen Ergebnissen. Damit ist P0-02 funktional abgeschlossen; P0-03 (Quellen-/Qualitätsprüfung und CSV-Export) bleibt offen.
 
 ## Scope / Priorisierung
 
@@ -10,7 +10,7 @@ Diese Roadmap ist eine Planung, keine Behauptung abgeschlossener Implementierung
 | --- | --- | --- | --- | --- |
 | 0. Fork-Basis | P0 | GitHub-Fork aktuell, Dokumentation/Backlog | `main` mit Firecrawl synchronisiert; Dokumente im Repo | GitHub-Sync + Dokumentation erledigt |
 | 1. Lokaler Checkout | P0 | Aktuellen Fork lokal laden und starten | Lokalstart und CSV-Upload bis zur API-Key-Abfrage bestätigt; einzelne Git-/Build-Checks nicht separat belegt | **Abgeschlossen nach Nutzerbestätigung** |
-| 2. Minimaler Provider-Pfad | P0 | Vorhandenen Firecrawl-Key und OpenRouter sicher anbinden | OpenRouter mit dokumentiertem Standardmodell, strukturierten Outputs und klaren Fehlermeldungen getestet; keine Secrets im Git | Offen |
+| 2. Minimaler Provider-Pfad | P0 | Vorhandenen Firecrawl-Key und OpenRouter sicher anbinden | Nach behobenem Shell-Key-Konflikt wurde ein vollständiger Enrichment-Lauf mit gefundenen Daten vom Nutzer bestätigt; Detailvalidierung in P0-03 | **Abgeschlossen (funktional)** |
 | 3. CSV-Baseline-Test | P0 | Enrichment fachlich nachweisen | 1–3 berechtigte Testdatensätze, 3–5 Firmenfelder, Ergebnis-/Quellen-/Kostenprotokoll und CSV-Export | Offen |
 | 4. Produkt-/UX-Grundlage | P1 | Digi-Pal Branding und klares Bedienkonzept | Penpot-Entwurf bestätigt; UI bei Funktionserhalt minimal angepasst | Geplant |
 | 5. Erste Produkt-Härtung | P1 | Sichere interne Pilot-Nutzung | Authentifizierung, Logging/Secret-Prüfung, kontrollierte Limits, Datenschutzkonzept | Geplant |
@@ -31,7 +31,7 @@ Diese Roadmap ist eine Planung, keine Behauptung abgeschlossener Implementierung
 
 **Abnahmevermerk 15.11.2026:** Nach erfolgloser Suche wurde der aktuelle Fork lokal geklont. Die Weboberfläche startete; ein CSV-Upload führte zur Firecrawl-Key-Abfrage (Nutzerbestätigung). Separater Produktions-Build und tatsächliche Remotes sind noch nicht durch eine Terminalausgabe belegt; als ergänzende Checks offen, ohne P0-02 zu blockieren.
 
-### P0-02 – OpenRouter minimal kompatibel anbinden
+### P0-02 – OpenRouter minimal kompatibel anbinden (abgeschlossen: Nutzerbestätigung 15.11.2026)
 
 - Alle tatsächlich produktiven OpenAI-Client-Instanzen und Modellstrings ermitteln (`lib/services/openai.ts`, `app/api/generate-fields/route.ts`, ggf. weitere).
 - Festhalten: Aktueller Code enthält `gpt-5`/`gpt-5-mini`; README-Text zu GPT-4o ist veraltet.
@@ -41,7 +41,7 @@ Diese Roadmap ist eine Planung, keine Behauptung abgeschlossener Implementierung
 - Firecrawl-Zugang aus lokaler `.env.local`, keine API-Keys aus browserseitigem `localStorage` für den geplanten Normalbetrieb.
 - Konkreten Token-/Credit-Verbrauch klein halten und Test nur nach Freigabe ausführen.
 
-**Abnahme:** mit Firecrawl + OpenRouter mindestens ein nachweislich korrektes strukturiertes Ergebnis oder klar dokumentierter Blocker mit reproduzierbarer Fehlermeldung.
+**Abnahmevermerk:** Der Nutzer bestätigte einen vollständig durchgelaufenen Enrichment-Lauf mit gefundenen Daten über Firecrawl und OpenRouter, nachdem `unset OPENAI_API_KEY` einen globalen Shell-Key-Konflikt beseitigte. Formale Ergebnis-/Quellenprüfung, Export und Kostenmessung gehören zu P0-03; ein separater Produktions-Build ist nicht nachgewiesen. Der Feature-Branch/PR #1 ist noch nicht in `main` gemerged.
 
 ### P0-03 – CSV-Smoke-Test und Bewertung
 
