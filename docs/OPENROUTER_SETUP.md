@@ -1,6 +1,6 @@
 # Digi Enrich – OpenRouter-Konfiguration (P0-02)
 
-Stand: 2026-11-15 | Status: **Code vorbereitet, lokal noch nicht getestet**
+Stand: 2026-11-15 | Status: **Lokaler UI-/CSV-Import vom Nutzer bestätigt; externe API-Anreicherung nicht getestet**
 
 Diese Anleitung gilt erst mit Branch `feat/openrouter-config-mvp` oder nach dessen Merge. Die Änderung ist bewusst minimal: Die bestehenden OpenAI-SDK-Aufrufe bleiben erhalten und erhalten einen optionalen `baseURL` sowie übersteuerbare Modellbezeichner. Ohne gesetzte Overrides bleibt das aktuelle Upstream-Verhalten (GPT-5 / GPT-5-mini) bestehen.
 
@@ -29,6 +29,12 @@ Hinweise:
 - Wenn alle Provider-Overrides entfernt werden, werden wieder die normalen OpenAI-Endpunkte verwendet.
 - Weder Browser-Key-Dialog noch `localStorage` benötigen im vorgesehenen Ablauf API-Keys: Beide Schlüssel liegen serverseitig in `.env.local` und werden vom vorhandenen `/api/check-env` erkannt.
 
+## Bestätigter Zwischenstand (15.11.2026)
+
+Laut Nutzer und Screenshot: Die Firecrawl-Sample-CSV wird eingelesen (22 Datensätze), die E-Mail-Spalte wird erkannt, und die App zeigt ohne erneute Key-Abfrage die Enrichment-Konfiguration mit drei Feldern (Company Name, Company Description, Industry). **Noch kein Nachweis** für erfolgreiche OpenRouter-/Firecrawl-Aufrufe, strukturierte Ergebnisse, CSV-Export oder separat erfolgreiches `npm run build`.
+
+Vor einem echten, kostenpflichtigen Test die Sample-Datei auf **einen rechtmäßig verwendbaren** eigenen/freigegebenen Datensatz reduzieren; öffentlich enthaltene persönliche geschäftliche E-Mails sind nicht automatisch zur Anreicherung freigegeben. Keine kostenpflichtigen Tests ohne ausdrückliche Freigabe.
+
 ## Minimaler Testplan
 
 1. `npm ci` (nur falls noch nicht installiert) und `npm run build` als Compile-/Build-Prüfung.
@@ -48,7 +54,7 @@ Hinweise:
 
 - Kein Provider-Benchmark, kein Fallback-Router, keine lokale Modellimplementierung.
 - Keine Änderungen an Firecrawl, CSV-Upload, EspoCRM oder UI/Branding.
-- Der Code ist bislang **nicht** gegen einen echten OpenRouter-Key gestartet oder per Build geprüft.
+- Der lokale UI-Start mit importierter Sample-CSV ist bestätigt. **Nicht nachgewiesen** sind ein erfolgreicher OpenRouter-API-Aufruf, schema-valides Enrichment-Ergebnis oder ein separater Produktions-Build.
 - Sicherheit vor Kundeneinsatz: Browser-Key-UI und API-Key-Header müssen separat bewertet werden. Für P0-02 werden sie nicht umgebaut.
 
 Dokumentation: [Roadmap](ROADMAP.md) · [Aufgaben](TASKS.md) · [Projektstand](PROJECT_STATUS.md)
