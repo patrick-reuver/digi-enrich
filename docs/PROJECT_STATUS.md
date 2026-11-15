@@ -2,7 +2,7 @@
 
 Stand: 2026-11-15 | Status: **MVP-Vorbereitung** | Verantwortungsbereich: Digi-Pal
 
-> Diese Datei dokumentiert den tatsächlichen GitHub-Stand und vereinbarte Entscheidungen. Sie ist **kein** Nachweis eines erfolgreichen lokalen Builds, einer erfolgreich laufenden Enrichment-Pipeline oder vorhandener Git-Remotes auf einem lokalen Mac.
+> Diese Datei dokumentiert den tatsächlichen GitHub-Stand und vereinbarte Entscheidungen. **Der Nutzer hat am 15.11.2026 den lokalen Start sowie einen CSV-Upload bis zur Firecrawl-Key-Abfrage bestätigt.** Dies ist kein Nachweis eines Produktions-Builds, funktionierender API-Anreicherung oder verifizierter lokaler Git-Remotes.
 
 ## Zielbild
 
@@ -23,11 +23,11 @@ Die erste Version dient Digi-Pal intern; eine spätere kundenfähige Lösung wir
 | Primärsprache / UI | TypeScript, Next.js / React |
 | GitHub-Synchronisierung | **2026-11-15 erfolgreich**: `main` per Fast-Forward von `e395306e8bca501bf9a7bb33b80dc81ad5724370` auf Upstream `4ce8ba2fcf8a65578208e2caa729b47bca0ab5ac` |
 | Vorheriger Rückstand | 6 Commits, 0 eigene vorausliegende Commits |
-| Lokales Arbeitsverzeichnis | **Ungeprüft** – User vermutet bereits vorhandenen Klon |
+| Lokales Arbeitsverzeichnis | Nach erfolgloser Suche wurde der aktuelle Fork lokal geklont; Anwendung startfähig (Nutzerbestätigung 15.11.2026) |
 | Lokaler Remote `upstream` | **Ungeprüft / einzurichten** |
-| Laufender Test | **Noch nicht durchgeführt** |
+| Laufender Test | **UI/CSV-Smoke-Test bestätigt:** CSV-Upload führt zur Firecrawl-Key-Abfrage; **keine echte API-Anreicherung durchgeführt** |
 
-WICHTIG: Die Aktualisierung des *GitHub-Forks* ändert nicht den lokalen Arbeitsstand. Bei lokal vorhandenem Klon zuerst Status, Branch und Remotes prüfen und bestehende Änderungen sichern; dann erst fast-forwarden.
+WICHTIG: Die Aktualisierung des *GitHub-Forks* erfolgte vor dem lokalen Klon. Der lokale Checkout wurde vom Nutzer als erfolgreich bestätigt. Die tatsächliche Remote-Konfiguration sollte bei Gelegenheit mit `git remote -v` geprüft werden.
 
 ## Verbindliche MVP-Entscheidungen
 
@@ -62,7 +62,7 @@ WICHTIG: Die Aktualisierung des *GitHub-Forks* ändert nicht den lokalen Arbeits
 | UI hält API-Keys bei manueller Eingabe im Browser-`localStorage` vor; Backend unterstützt teils API-Key-Header. | Für interne Tests ausschließlich serverseitige `.env.local` bevorzugen; vor Kundeneinsatz Secret-Handling neu bewerten. |
 | Server loggt u. a. Kontakt-E-Mail-Adressen während der Verarbeitung. | Vor personenbezogener Nutzung Log-Minimierung/Retention und Datenschutz-Folgen prüfen. |
 | Fire Enrich ist **nicht vollständig offline**, selbst bei lokalem Next.js-Betrieb. | Internet/API-Kosten und Auftragsverarbeitungs-/Datenübertragungsfragen vor realen Kundendaten klären. |
-| Sicherheits-/Abhängigkeitstests und Runtime-Smoke-Test stehen noch aus. | `npm ci`, `npm run build`, relevante Lint-/Security-Checks und einen kleinen Enrichment-Lauf lokal durchführen. |
+| Sicherheits-/Abhängigkeitstests und vollständiger Enrichment-Smoke-Test stehen noch aus. | Der lokale UI-Start und CSV-Upload bis zur API-Key-Abfrage sind bestätigt; `npm run build`, relevante Lint-/Security-Checks und ein kleiner **echter** Enrichment-Lauf bleiben offen. |
 
 Hinweis zu den Daten: KI-Konfidenz allein beweist die Richtigkeit nicht. Ergebnisse müssen nachvollziehbaren Quellen zugeordnet und insbesondere Personen-/E-Mail-Daten verifiziert werden.
 
