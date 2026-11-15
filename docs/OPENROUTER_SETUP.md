@@ -58,3 +58,22 @@ Vor einem echten, kostenpflichtigen Test die Sample-Datei auf **einen rechtmäß
 - Sicherheit vor Kundeneinsatz: Browser-Key-UI und API-Key-Header müssen separat bewertet werden. Für P0-02 werden sie nicht umgebaut.
 
 Dokumentation: [Roadmap](ROADMAP.md) · [Aufgaben](TASKS.md) · [Projektstand](PROJECT_STATUS.md)
+
+
+## Fehlversuch 15.11.2026 – HTTP 401 bei OpenRouter (noch nicht behoben)
+
+**Beobachtung:** Der Nutzer meldet bei der ersten Anreicherung in `OpenAIService.extractStructuredDataOriginal` eine HTTP-401-Antwort mit der Aussage, dass der übertragene API-Key nicht als OpenRouter-Key erkannt wird (`sk-or-`-Präfix erwartet). Die gezeigte, redigierte `.env.local` enthält dem Format nach einen OpenRouter-Key, die URL `https://openrouter.ai/api/v1` und die Modellbezeichner `openai/gpt-4o` / `openai/gpt-4o-mini`. **Es wurden keine Secrets in die Dokumentation aufgenommen.**
+
+**Codebefund:** `app/api/enrich/route.ts` nimmt vorrangig `process.env.OPENAI_API_KEY`; `lib/config/llm.ts` nutzt `OPENAI_BASE_URL`. Next.js priorisiert bereits vorhandene Prozess-Variablen vor `.env.local` ([Dokumentation](https://nextjs.org/docs/app/guides/environment-variables#environment-variable-load-order)). Ein geerbter OpenAI-Key in der Shell oder ein nicht neu gestarteter Dev-Server ist daher eine plausible Ursache, **noch nicht bestätigt**. Wenn kein Shell-Key vorhanden ist, andere .env.*-Dateien, Serverprozess und wirklichen Key-Typ untersuchen.
+
+**Diagnose (ohne Schlüsselausgabe):**
+
+```bash
+node -e 'const k=process.env.OPENAI_API_KEY; console.log(k ? (k.startsWith("sk-or-") ? "OpenRouter-Key in Shell gesetzt" : "Anderer API-Key in Shell gesetzt") : "Kein OPENAI_API_KEY in Shell gesetzt")'
+```
+
+**Falls anderer Shell-Key gesetzt:** Next.js mit `Ctrl+C` stoppen, in derselben Shell `unset OPENAI_API_KEY` ausführen, dann `npm run dev` neu starten. Bei weiterem Fehler effektive Konfiguration prüfen, ohne API-Keys auszugeben. Ein bloßes Vorhandensein eines Keys im `/api/check-env` beweist nicht dessen Provider/Typ.
+
+**Kostenschutz:** Keinen vollständigen Test mit 22 Zeilen erneut starten; bei fehlgeschlagenem LLM-Schritt könnten Firecrawl-Requests bereits Kosten ausgelöst haben. Nach Konfigurationsfix nur mit 1 rechtmäßig nutzbaren Testdatensatz erneut prüfen.
+
+**Status:** P0-02 blockiert bei 401 bis zur Ursachenklärung. Kein erfolgreicher Enrichment-Test nachgewiesen.
