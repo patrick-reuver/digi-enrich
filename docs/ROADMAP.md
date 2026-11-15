@@ -2,14 +2,14 @@
 
 Stand: 2026-11-15 | Prinzip: **erst lauffähige CSV-Baseline, dann UX/Integrationen**
 
-Diese Roadmap ist eine Planung, keine Behauptung abgeschlossener Implementierung. Abgeschlossen sind die GitHub-Upstream-Synchronisierung und die initiale Projektdokumentation. Der lokale Lauf und externe API-Tests sind noch offen.
+Diese Roadmap ist eine Planung, keine Behauptung abgeschlossener Implementierung. Abgeschlossen sind die GitHub-Upstream-Synchronisierung, die initiale Projektdokumentation und **P0-01 (lokaler Start und CSV-Upload bis zur API-Key-Abfrage, vom Nutzer am 15.11.2026 bestätigt)**. Externe API-Tests und eine tatsächliche Datenanreicherung sind noch offen.
 
 ## Scope / Priorisierung
 
 | Phase | Priorität | Ziel | Definition of Done | Stand |
 | --- | --- | --- | --- | --- |
 | 0. Fork-Basis | P0 | GitHub-Fork aktuell, Dokumentation/Backlog | `main` mit Firecrawl synchronisiert; Dokumente im Repo | GitHub-Sync + Dokumentation erledigt |
-| 1. Lokaler Checkout | P0 | Vorhandenen Klon finden, Remotes prüfen, lokal installieren | `origin`/ `upstream` korrekt; sauberer Fast-Forward; `npm ci` und Build/Start dokumentiert | Offen |
+| 1. Lokaler Checkout | P0 | Aktuellen Fork lokal laden und starten | Lokalstart und CSV-Upload bis zur API-Key-Abfrage bestätigt; einzelne Git-/Build-Checks nicht separat belegt | **Abgeschlossen nach Nutzerbestätigung** |
 | 2. Minimaler Provider-Pfad | P0 | Vorhandenen Firecrawl-Key und OpenRouter sicher anbinden | OpenRouter mit dokumentiertem Standardmodell, strukturierten Outputs und klaren Fehlermeldungen getestet; keine Secrets im Git | Offen |
 | 3. CSV-Baseline-Test | P0 | Enrichment fachlich nachweisen | 1–3 berechtigte Testdatensätze, 3–5 Firmenfelder, Ergebnis-/Quellen-/Kostenprotokoll und CSV-Export | Offen |
 | 4. Produkt-/UX-Grundlage | P1 | Digi-Pal Branding und klares Bedienkonzept | Penpot-Entwurf bestätigt; UI bei Funktionserhalt minimal angepasst | Geplant |
@@ -19,7 +19,7 @@ Diese Roadmap ist eine Planung, keine Behauptung abgeschlossener Implementierung
 
 ## Reihenfolge der ersten konkreten Arbeiten
 
-### P0-01 – Vorhandenen Klon finden und Git-Basis prüfen
+### P0-01 – Vorhandenen Klon finden und Git-Basis prüfen (abgeschlossen nach Nutzerbestätigung)
 
 - Lokalen Projektpfad ermitteln; **nicht** versehentlich erneut in ein vorhandenes Projekt klonen.
 - `git status --short`, `git branch --show-current`, `git remote -v`, `git log -5 --oneline` prüfen.
@@ -29,7 +29,7 @@ Diese Roadmap ist eine Planung, keine Behauptung abgeschlossener Implementierung
 - `npm ci` (vorzugsweise vorhandene npm-Lockdatei respektieren), `npm run build` und `npm run dev` testen.
 - Ergebnis, Systemvoraussetzungen und Fehlermeldungen dokumentieren.
 
-**Abnahme:** reproduzierbare lokale Installationsanleitung, Weboberfläche auf localhost erreichbar, keine verlorenen Änderungen.
+**Abnahmevermerk 15.11.2026:** Nach erfolgloser Suche wurde der aktuelle Fork lokal geklont. Die Weboberfläche startete; ein CSV-Upload führte zur Firecrawl-Key-Abfrage (Nutzerbestätigung). Separater Produktions-Build und tatsächliche Remotes sind noch nicht durch eine Terminalausgabe belegt; als ergänzende Checks offen, ohne P0-02 zu blockieren.
 
 ### P0-02 – OpenRouter minimal kompatibel anbinden
 
