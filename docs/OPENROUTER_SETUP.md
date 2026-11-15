@@ -60,11 +60,11 @@ Vor einem echten, kostenpflichtigen Test die Sample-Datei auf **einen rechtmäß
 Dokumentation: [Roadmap](ROADMAP.md) · [Aufgaben](TASKS.md) · [Projektstand](PROJECT_STATUS.md)
 
 
-## Fehlversuch 15.11.2026 – HTTP 401 bei OpenRouter (noch nicht behoben)
+## Fehlversuch 15.11.2026 – HTTP 401 bei OpenRouter (Ursache bestätigt, Konfiguration korrigiert)
 
 **Beobachtung:** Der Nutzer meldet bei der ersten Anreicherung in `OpenAIService.extractStructuredDataOriginal` eine HTTP-401-Antwort mit der Aussage, dass der übertragene API-Key nicht als OpenRouter-Key erkannt wird (`sk-or-`-Präfix erwartet). Die gezeigte, redigierte `.env.local` enthält dem Format nach einen OpenRouter-Key, die URL `https://openrouter.ai/api/v1` und die Modellbezeichner `openai/gpt-4o` / `openai/gpt-4o-mini`. **Es wurden keine Secrets in die Dokumentation aufgenommen.**
 
-**Codebefund:** `app/api/enrich/route.ts` nimmt vorrangig `process.env.OPENAI_API_KEY`; `lib/config/llm.ts` nutzt `OPENAI_BASE_URL`. Next.js priorisiert bereits vorhandene Prozess-Variablen vor `.env.local` ([Dokumentation](https://nextjs.org/docs/app/guides/environment-variables#environment-variable-load-order)). Ein geerbter OpenAI-Key in der Shell oder ein nicht neu gestarteter Dev-Server ist daher eine plausible Ursache, **noch nicht bestätigt**. Wenn kein Shell-Key vorhanden ist, andere .env.*-Dateien, Serverprozess und wirklichen Key-Typ untersuchen.
+**Codebefund:** `app/api/enrich/route.ts` nimmt vorrangig `process.env.OPENAI_API_KEY`; `lib/config/llm.ts` nutzt `OPENAI_BASE_URL`. Next.js priorisiert bereits vorhandene Prozess-Variablen vor `.env.local` ([Dokumentation](https://nextjs.org/docs/app/guides/environment-variables#environment-variable-load-order)). Ein geerbter OpenAI-Key in der Shell war nach Nutzerprüfung **die bestätigte Ursache**. Wenn kein Shell-Key vorhanden ist, andere .env.*-Dateien, Serverprozess und wirklichen Key-Typ untersuchen.
 
 **Diagnose (ohne Schlüsselausgabe):**
 
@@ -72,8 +72,10 @@ Dokumentation: [Roadmap](ROADMAP.md) · [Aufgaben](TASKS.md) · [Projektstand](P
 node -e 'const k=process.env.OPENAI_API_KEY; console.log(k ? (k.startsWith("sk-or-") ? "OpenRouter-Key in Shell gesetzt" : "Anderer API-Key in Shell gesetzt") : "Kein OPENAI_API_KEY in Shell gesetzt")'
 ```
 
-**Falls anderer Shell-Key gesetzt:** Next.js mit `Ctrl+C` stoppen, in derselben Shell `unset OPENAI_API_KEY` ausführen, dann `npm run dev` neu starten. Bei weiterem Fehler effektive Konfiguration prüfen, ohne API-Keys auszugeben. Ein bloßes Vorhandensein eines Keys im `/api/check-env` beweist nicht dessen Provider/Typ.
+**Bestätigter Fix:** Der Nutzer führte in derselben Shell `unset OPENAI_API_KEY` aus und meldete, dass Schritt 2 funktioniert hat. Damit wurde die konkurrierende Prozessvariable entfernt; Next.js kann die `.env.local` verwenden. Schritt 3 (zusätzliche Diagnostik mit `@next/env`) war nicht notwendig. Das gilt für diese Shell-Sitzung; bei neuen Terminals könnte ein globaler Export erneut aktiv werden. Ein bloßes Vorhandensein eines Keys im `/api/check-env` beweist nicht dessen Provider/Typ.
 
 **Kostenschutz:** Keinen vollständigen Test mit 22 Zeilen erneut starten; bei fehlgeschlagenem LLM-Schritt könnten Firecrawl-Requests bereits Kosten ausgelöst haben. Nach Konfigurationsfix nur mit 1 rechtmäßig nutzbaren Testdatensatz erneut prüfen.
 
-**Status:** P0-02 blockiert bei 401 bis zur Ursachenklärung. Kein erfolgreicher Enrichment-Test nachgewiesen.
+**Status:** Ursache des HTTP-401-Problems identifiziert und lokaler Workaround laut Nutzer erfolgreich. **Noch nicht explizit bestätigt:** vollständiges, schema-valides Enrichment-Ergebnis mit Quellen und CSV-Export. P0-02 bleibt bis dahin in Ergebnisprüfung; P0-03 bleibt offen.
+
+**Vorbeugung:** Shell-weite `OPENAI_API_KEY`-Exports künftig vermeiden, wenn mehrere Anbieter genutzt werden. Alternativ `env -u OPENAI_API_KEY npm run dev` als einmaliger Start ohne die geerbte Variable. Langfristig ggf. dedizierte `OPENROUTER_API_KEY`-Konfiguration statt überladener generischer Variable, aber **kein weiterer MVP-Umbau nur aus diesem Anlass**.
