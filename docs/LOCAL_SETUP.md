@@ -4,7 +4,7 @@ Stand: 2026-11-15. **Anleitung, nicht bereits ausgeführter Lokallauf.** Die fol
 
 ## 1. Vorhandenen Klon suchen
 
-Zunächst in den bekannten Entwicklungsverzeichnissen suchen (z. B. `~/ _workspace` ohne Leerzeichen, falls vorhanden). Eine mögliche Suche:
+Zunächst in den bekannten Entwicklungsverzeichnissen suchen (z. B. `~/_workspace`, falls vorhanden). Eine mögliche Suche:
 
 ```bash
 find "$HOME" -maxdepth 6 -type d -name "digi-enrich" 2>/dev/null
