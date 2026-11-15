@@ -1,6 +1,6 @@
 # Digi Enrich – OpenRouter-Konfiguration (P0-02)
 
-Stand: 2026-11-15 | Status: **Lokaler UI-/CSV-Import vom Nutzer bestätigt; externe API-Anreicherung nicht getestet**
+Stand: 2026-11-15 | Status: **P0-02 funktional abgeschlossen – erfolgreiche Anreicherung vom Nutzer bestätigt**
 
 Diese Anleitung gilt erst mit Branch `feat/openrouter-config-mvp` oder nach dessen Merge. Die Änderung ist bewusst minimal: Die bestehenden OpenAI-SDK-Aufrufe bleiben erhalten und erhalten einen optionalen `baseURL` sowie übersteuerbare Modellbezeichner. Ohne gesetzte Overrides bleibt das aktuelle Upstream-Verhalten (GPT-5 / GPT-5-mini) bestehen.
 
@@ -31,7 +31,7 @@ Hinweise:
 
 ## Bestätigter Zwischenstand (15.11.2026)
 
-Laut Nutzer und Screenshot: Die Firecrawl-Sample-CSV wird eingelesen (22 Datensätze), die E-Mail-Spalte wird erkannt, und die App zeigt ohne erneute Key-Abfrage die Enrichment-Konfiguration mit drei Feldern (Company Name, Company Description, Industry). **Noch kein Nachweis** für erfolgreiche OpenRouter-/Firecrawl-Aufrufe, strukturierte Ergebnisse, CSV-Export oder separat erfolgreiches `npm run build`.
+Laut Nutzer und Screenshot: Die Firecrawl-Sample-CSV wird eingelesen (22 Datensätze), die E-Mail-Spalte wird erkannt, und die App zeigt ohne erneute Key-Abfrage die Enrichment-Konfiguration mit drei Feldern (Company Name, Company Description, Industry). **Zu diesem Zeitpunkt noch kein Nachweis** eines vollständigen Enrichment-Laufs. Ein erfolgreicher Lauf wurde nach dem weiter unten dokumentierten 401-Fix später vom Nutzer bestätigt; Quellenqualität, CSV-Export und separater `npm run build` sind weiterhin nicht belegt.
 
 Vor einem echten, kostenpflichtigen Test die Sample-Datei auf **einen rechtmäßig verwendbaren** eigenen/freigegebenen Datensatz reduzieren; öffentlich enthaltene persönliche geschäftliche E-Mails sind nicht automatisch zur Anreicherung freigegeben. Keine kostenpflichtigen Tests ohne ausdrückliche Freigabe.
 
@@ -54,7 +54,7 @@ Vor einem echten, kostenpflichtigen Test die Sample-Datei auf **einen rechtmäß
 
 - Kein Provider-Benchmark, kein Fallback-Router, keine lokale Modellimplementierung.
 - Keine Änderungen an Firecrawl, CSV-Upload, EspoCRM oder UI/Branding.
-- Der lokale UI-Start mit importierter Sample-CSV ist bestätigt. **Nicht nachgewiesen** sind ein erfolgreicher OpenRouter-API-Aufruf, schema-valides Enrichment-Ergebnis oder ein separater Produktions-Build.
+- Der lokale UI-Start mit importierter Sample-CSV **und ein vollständiger Enrichment-Lauf mit gefundenen Ergebnissen** sind laut Nutzer bestätigt. **Nicht separat nachgewiesen**: formale Schema-/Quellenprüfung, CSV-Export und Produktions-Build.
 - Sicherheit vor Kundeneinsatz: Browser-Key-UI und API-Key-Header müssen separat bewertet werden. Für P0-02 werden sie nicht umgebaut.
 
 Dokumentation: [Roadmap](ROADMAP.md) · [Aufgaben](TASKS.md) · [Projektstand](PROJECT_STATUS.md)
@@ -76,6 +76,6 @@ node -e 'const k=process.env.OPENAI_API_KEY; console.log(k ? (k.startsWith("sk-o
 
 **Kostenschutz:** Keinen vollständigen Test mit 22 Zeilen erneut starten; bei fehlgeschlagenem LLM-Schritt könnten Firecrawl-Requests bereits Kosten ausgelöst haben. Nach Konfigurationsfix nur mit 1 rechtmäßig nutzbaren Testdatensatz erneut prüfen.
 
-**Status:** Ursache des HTTP-401-Problems identifiziert und lokaler Workaround laut Nutzer erfolgreich. **Noch nicht explizit bestätigt:** vollständiges, schema-valides Enrichment-Ergebnis mit Quellen und CSV-Export. P0-02 bleibt bis dahin in Ergebnisprüfung; P0-03 bleibt offen.
+**Status nach weiterer Nutzerbestätigung (15.11.2026):** Der vollständige Enrichment-Lauf ist erfolgreich durchgelaufen und hat Daten gefunden. **P0-02 ist damit als funktionaler Provider-Test abgeschlossen.** Detailvalidierung von Resultatfeldern/Quellen, Kosten, CSV-Export sowie ein separat geprüfter Produktions-Build bleiben offen; P0-03 ist noch nicht abgeschlossen.
 
 **Vorbeugung:** Shell-weite `OPENAI_API_KEY`-Exports künftig vermeiden, wenn mehrere Anbieter genutzt werden. Alternativ `env -u OPENAI_API_KEY npm run dev` als einmaliger Start ohne die geerbte Variable. Langfristig ggf. dedizierte `OPENROUTER_API_KEY`-Konfiguration statt überladener generischer Variable, aber **kein weiterer MVP-Umbau nur aus diesem Anlass**.
