@@ -6,20 +6,19 @@ Stand: 2026-11-15. Die GitHub-Issue-Funktion ist bei diesem Repository derzeit d
 
 | ID | Aufgabe | Status | Abhängigkeit |
 | --- | --- | --- | --- |
-| P0-01 | Lokalen Klon identifizieren, Remotes einrichten, Build starten | Offen | keine |
+| P0-01 | Lokalen Klon identifizieren, Remotes einrichten, Build starten | **Abgeschlossen (Nutzerbestätigung, 15.11.2026)** | keine |
 | P0-02 | OpenRouter-Minimaladapter und strukturierten Output testen | Offen | P0-01 |
 | P0-03 | 1–3-Zeilen-CSV-Smoke-Test und Qualitätsprotokoll | Offen | P0-02 |
 
-### P0-01 – Lokalbestand und Setup
+### P0-01 – Lokalbestand und Setup — abgeschlossen (vom Nutzer bestätigt)
 
-- [ ] Vorhandenen Klon suchen, statt blind neu zu klonen.
-- [ ] Branch, lokale Änderungen und Remotes protokollieren; Änderungen vor Updates sichern.
-- [ ] `origin` auf `patrick-reuver/digi-enrich`, `upstream` auf `firecrawl/fire-enrich` setzen.
-- [ ] Lokal mit dem bereits aktualisierten GitHub-`origin/main` ohne Force-Push synchronisieren.
-- [ ] `npm ci`, `npm run build`, `npm run dev` prüfen.
-- [ ] Ergebnisse und eventuelle Fehler in [LOCAL_SETUP.md](LOCAL_SETUP.md) ergänzen.
+- [x] Nach nicht gefundenem lokalem Klon den aktuellen Digi-Enrich-Fork in das gewünschte Verzeichnis geklont.
+- [x] Aktuellen GitHub-Code lokal geladen.
+- [x] Lokalen Entwicklungsstart und Erreichbarkeit der Oberfläche vom Nutzer bestätigt.
+- [x] CSV-Datei hochgeladen; anschließend erscheint erwartungsgemäß die Abfrage des Firecrawl-API-Schlüssels.
+- [ ] Ergänzende Kontrolle: tatsächliche `git remote -v`-Ausgabe und separater Produktions-Build (`npm run build`) wurden nicht vorgelegt. **Nicht als nachgewiesen darstellen; kein Blocker für P0-02.**
 
-**Abnahme:** lokale Weboberfläche startet; keine Arbeit verloren; Git-Remotes korrekt; Secrets außerhalb von Git.
+**Abnahmeentscheidung:** P0-01 für den vereinbarten lokalen MVP-Smoke-Test erfolgreich abgeschlossen (Nutzerbestätigung am 15.11.2026). **Noch nicht getestet:** echter Firecrawl-/LLM-Aufruf, Enrichment-Resultate, CSV-Export oder Produktions-Build. Diese Grenzen gehören zu P0-02/P0-03 bzw. zur ergänzenden Technikprüfung.
 
 ### P0-02 – Vorhandene APIs minimal verdrahten
 
