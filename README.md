@@ -1,5 +1,8 @@
 # Fire Enrich - AI-Powered Data Enrichment Tool
 
+> **Digi Enrich (Digi-Pal development fork):** The upstream application is currently used as a technical baseline. For the German-language project scope, roadmap, local setup and P0 worklist, see [Projektstand](docs/PROJECT_STATUS.md), [Roadmap](docs/ROADMAP.md), [Setup](docs/LOCAL_SETUP.md) and [Aufgaben](docs/TASKS.md). The upstream README below is retained; its GPT-4o references do not fully match the current code, which also uses `gpt-5` and `gpt-5-mini`. Rebranding and CRM integration are not implemented yet.
+
+
 <div align="center">
   <img src="https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExNjJwMnF2cW5zbXBhbGV6NXBpb3lkZmVhMWEwY3hmdmt3d3ZtbWc5YSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/QhpbWI09KyFZ0rwD72/giphy.gif" alt="Fire Enrich Demo" width="100%" />
 </div>
