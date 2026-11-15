@@ -7,7 +7,7 @@ Stand: 2026-11-15. Die GitHub-Issue-Funktion ist bei diesem Repository derzeit d
 | ID | Aufgabe | Status | Abhängigkeit |
 | --- | --- | --- | --- |
 | P0-01 | Lokalen Klon identifizieren, Remotes einrichten, Build starten | **Abgeschlossen (Nutzerbestätigung, 15.11.2026)** | keine |
-| P0-02 | OpenRouter-Minimaladapter und strukturierten Output testen | **401-Ursache behoben; Ergebnisprüfung offen** | P0-01 |
+| P0-02 | OpenRouter-Minimaladapter und strukturierten Output testen | **Abgeschlossen – Funktionslauf vom Nutzer bestätigt (15.11.2026)** | P0-01 |
 | P0-03 | 1–3-Zeilen-CSV-Smoke-Test und Qualitätsprotokoll | Offen | P0-02 |
 
 ### P0-01 – Lokalbestand und Setup — abgeschlossen (vom Nutzer bestätigt)
@@ -20,17 +20,18 @@ Stand: 2026-11-15. Die GitHub-Issue-Funktion ist bei diesem Repository derzeit d
 
 **Abnahmeentscheidung:** P0-01 für den vereinbarten lokalen MVP-Smoke-Test erfolgreich abgeschlossen (Nutzerbestätigung am 15.11.2026). **Noch nicht getestet:** echter Firecrawl-/LLM-Aufruf, Enrichment-Resultate, CSV-Export oder Produktions-Build. Diese Grenzen gehören zu P0-02/P0-03 bzw. zur ergänzenden Technikprüfung.
 
-### P0-02 – Vorhandene APIs minimal verdrahten
+### P0-02 – Vorhandene APIs minimal verdrahten — abgeschlossen (funktionaler Test)
 
-**Stand (15.11.2026):** Beim ersten Lauf HTTP 401; Nutzer bestätigte einen andersartigen `OPENAI_API_KEY` in der Shell. Nach `unset OPENAI_API_KEY` funktionierte Schritt 2, zusätzliche Diagnose entfiel. **Bestätigte Ursache:** Prozessumgebung übersteuerte `.env.local`. Noch keine explizite Bestätigung eines vollständigen, schema-validen Enrichment-Ergebnisses und CSV-Exports. [Fehleranalyse](OPENROUTER_SETUP.md#fehlversuch-15112026--http-401-bei-openrouter-ursache-bestatigt-konfiguration-korrigiert).\n\n**Vorheriger Zwischenstand (15.11.2026, Nutzerbestätigung):** Feature-Branch lokal gestartet; Firecrawl-Sample-CSV ließ sich hochladen, die E-Mail-Spalte wurde erkannt, und die Anwendung zeigte ohne erneute API-Key-Abfrage die Konfiguration mit 22 Datensätzen und drei ausgewählten Feldern (Company Name, Company Description, Industry). Dies bestätigt den UI-/Import-Pfad, **nicht** die externe Firecrawl-/OpenRouter-Anreicherung oder die tatsächliche Modellkompatibilität. Ein Produktions-Build ist nicht gesondert belegt. Anleitung: [OPENROUTER_SETUP.md](OPENROUTER_SETUP.md).
+**Abnahme 15.11.2026:** Nach dem lokalen Start des Feature-Branches funktionierte der CSV-Upload. Der erste reale Enrichment-Versuch lieferte HTTP 401: Ein anderer, bereits global in der Shell gesetzter `OPENAI_API_KEY` hatte den OpenRouter-Schlüssel aus `.env.local` übersteuert. Nach `unset OPENAI_API_KEY` bestätigte der Nutzer, dass der Enrichment-Lauf vollständig durchgelaufen ist und Daten gefunden wurden. **Damit gilt P0-02 als funktional abgeschlossen.**
 
-- [ ] Verwendete OpenAI-Client-Instanzen und aktuell hartcodierte Modellnamen erfassen.
-- [ ] Nur notwendige Anpassungen für OpenRouter-`baseURL`, Modellnamen und serverseitige Secret-Konfiguration vornehmen.
-- [ ] Mit Firecrawl + OpenRouter JSON-Schema/Zod-Ausgabe für den gewählten Standardpfad validieren.
-- [ ] Dokumentationsabweichung README (GPT-4o) vs. Code (`gpt-5`/`gpt-5-mini`) korrigieren.
-- [ ] Fehler, API-Verbrauch und Modell dokumentieren. Kostenpflichtigen Test erst nach ausdrücklicher Freigabe.
+- [x] OpenAI-Client-/Modellpfade geprüft; minimale Konfiguration für OpenRouter-`baseURL` und Primär-/Fast-Modell integriert.
+- [x] Serverseitige Testkonfiguration über `.env.local` genutzt; keine Secrets im Repository erfasst.
+- [x] Funktionslauf über Firecrawl + OpenRouter nach Behebung des 401-Fehlers durch Nutzer bestätigt.
+- [x] Ursache und Workaround in [OPENROUTER_SETUP.md](OPENROUTER_SETUP.md) protokolliert.
+- [ ] **Nicht separat bestätigt:** Produktions-Build (`npm run build`), formale Zod-/Schema-Prüfung aller Ergebnisfelder, API-Kosten, Quellenqualität und CSV-Export. Diese Checks gehören zur technischen Nachprüfung bzw. **P0-03**.
+- [ ] Veraltete README-Verweise auf GPT-4o vs. Upstream-GPT-5-Defaults bei späterer Dokumentationspflege bereinigen; funktionaler Blocker ist dies nicht.
 
-**Abnahme:** mindestens ein nachweislich schema-valides Ergebnis; andernfalls reproduzierbarer Blocker.
+**Scope-Grenze:** Ein erfolgreicher Nutzerlauf belegt die grundsätzliche Provider-Integration, nicht die Fehlerfreiheit beliebiger Modelle, Datenbestände oder den produktiven Kundeneinsatz. Die Implementierung ist aktuell im [Draft-PR #1](https://github.com/patrick-reuver/digi-enrich/pull/1) auf dem Feature-Branch; noch nicht mit `main` gemerged.
 
 ### P0-03 – CSV-Testlauf
 
